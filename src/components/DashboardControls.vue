@@ -9,9 +9,15 @@
     </div>
 
     <div class="actions">
-      <button class="btn btn-primary" type="button" @click="toggleStream">
+      <button
+        class="btn btn-primary icon-action stream-action"
+        type="button"
+        :aria-label="store.isStreaming ? 'Pause stream' : 'Resume stream'"
+        :title="store.isStreaming ? 'Pause stream' : 'Resume stream'"
+        @click="toggleStream"
+      >
         <component :is="store.isStreaming ? Pause : Play" class="icon" />
-        {{ store.isStreaming ? 'Pause' : 'Resume' }}
+        <span class="btn-label">{{ store.isStreaming ? 'Pause' : 'Resume' }}</span>
       </button>
 
       <label class="field">
@@ -38,13 +44,26 @@
         </select>
       </label>
 
-      <button class="btn btn-secondary" type="button" @click="toggleTheme">
+      <button
+        class="btn btn-secondary icon-action theme-action"
+        type="button"
+        :aria-label="store.theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'"
+        :title="store.theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'"
+        @click="toggleTheme"
+      >
         <component :is="store.theme === 'dark' ? Sun : Moon" class="icon" />
-        {{ store.theme === 'dark' ? 'Light' : 'Dark' }}
+        <span class="btn-label">{{ store.theme === 'dark' ? 'Light' : 'Dark' }}</span>
       </button>
 
-      <button class="btn btn-secondary" type="button" @click="store.clearData">
-        <RotateCcw class="icon" /> Clear
+      <button
+        class="btn btn-secondary icon-action clear-action"
+        type="button"
+        aria-label="Clear data"
+        title="Clear data"
+        @click="store.clearData"
+      >
+        <RotateCcw class="icon" />
+        <span class="btn-label">Clear</span>
       </button>
     </div>
 
@@ -279,6 +298,91 @@ function toggleTheme() {
 
   .actions {
     justify-content: flex-start;
+  }
+}
+
+@media (max-width: 560px) {
+  .controls-container {
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm);
+  }
+
+  .status-indicator {
+    align-items: flex-start;
+    padding-bottom: var(--spacing-sm);
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .status-indicator small {
+    max-width: 100%;
+    white-space: normal;
+  }
+
+  .actions {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: var(--spacing-sm);
+    align-items: stretch;
+  }
+
+  .btn,
+  .field,
+  .select-input {
+    width: 100%;
+  }
+
+  .btn,
+  .chip {
+    min-height: 38px;
+    border-radius: 10px;
+  }
+
+  .icon-action {
+    grid-column: span 2;
+    height: 40px;
+    min-height: 40px;
+    padding: 0;
+  }
+
+  .stream-action {
+    order: 1;
+  }
+
+  .theme-action {
+    order: 2;
+  }
+
+  .clear-action {
+    order: 3;
+  }
+
+  .field {
+    grid-column: span 3;
+    order: 4;
+    margin-top: var(--spacing-xs);
+  }
+
+  .btn-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+  }
+
+  .dataset-toggles {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--spacing-sm);
+    padding-top: var(--spacing-sm);
+    border-top: 1px solid var(--border-color);
+  }
+
+  .chip {
+    justify-content: flex-start;
+    padding: 0 10px;
+    min-width: 0;
   }
 }
 </style>
