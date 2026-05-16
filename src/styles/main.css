@@ -4,6 +4,13 @@
   padding: 0;
 }
 
+html,
+body,
+#app {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
 body {
   font-family: var(--font-family);
   background-color: var(--bg-primary);
@@ -33,6 +40,8 @@ button {
 }
 
 .card {
+  min-width: 0;
+  max-width: 100%;
   background-color: var(--bg-panel);
   border: 1px solid var(--border-color);
   border-radius: var(--border-radius);

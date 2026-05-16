@@ -10,6 +10,7 @@ import { computed } from 'vue';
 import type { EChartsOption } from 'echarts';
 import VChart from 'vue-echarts';
 import type { ChartPoint } from '../../stores/metrics';
+import { useMediaQuery } from '../../composables/useMediaQuery';
 import './echarts';
 
 const props = defineProps<{
@@ -17,6 +18,7 @@ const props = defineProps<{
   data: ChartPoint[];
 }>();
 
+const isMobile = useMediaQuery('(max-width: 640px)');
 const yMax = computed(() => {
   const highest = props.data.reduce((max, point) => Math.max(max, point.value[1]), 0);
   if (highest <= 0) return 100;
@@ -35,7 +37,7 @@ const chartOption = computed<EChartsOption>(() => ({
   grid: {
     left: '3%',
     right: '4%',
-    bottom: '3%',
+    bottom: isMobile.value ? 34 : '3%',
     top: 16,
     containLabel: true
   },
@@ -43,7 +45,13 @@ const chartOption = computed<EChartsOption>(() => ({
     type: 'category',
     data: props.data.map(point => point.name),
     axisLine: { lineStyle: { color: '#334155' } },
-    axisLabel: { color: '#94a3b8' }
+    axisLabel: {
+      color: '#94a3b8',
+      hideOverlap: true,
+      interval: 0,
+      rotate: isMobile.value ? 35 : 0,
+      fontSize: isMobile.value ? 10 : 12
+    }
   },
   yAxis: {
     type: 'value',
@@ -68,9 +76,12 @@ const chartOption = computed<EChartsOption>(() => ({
 
 <style scoped>
 .chart-container {
+  min-width: 0;
+  max-width: 100%;
   min-height: 300px;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 .chart-title {
@@ -82,6 +93,9 @@ const chartOption = computed<EChartsOption>(() => ({
 .chart {
   flex: 1;
   width: 100%;
+  min-width: 0;
+  max-width: 100%;
   min-height: 240px;
+  overflow: hidden;
 }
 </style>

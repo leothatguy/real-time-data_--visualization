@@ -193,6 +193,8 @@ onUnmounted(() => {
 
 <style scoped>
 .dashboard-layout {
+  width: 100%;
+  min-width: 0;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -269,6 +271,8 @@ onUnmounted(() => {
 }
 
 .main-content {
+  min-width: 0;
+  width: 100%;
   flex: 1;
   padding: var(--spacing-xl);
   display: flex;
@@ -280,12 +284,14 @@ onUnmounted(() => {
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: var(--spacing-md);
+  min-width: 0;
 }
 
 .insight-strip {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr;
   gap: var(--spacing-md);
+  min-width: 0;
 }
 
 .insight {
@@ -317,6 +323,7 @@ onUnmounted(() => {
   grid-template-columns: minmax(0, 2fr) minmax(360px, 0.85fr);
   gap: var(--spacing-lg);
   align-items: stretch;
+  min-width: 0;
 }
 
 .charts-section {
@@ -330,6 +337,13 @@ onUnmounted(() => {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: var(--spacing-md);
+  min-width: 0;
+}
+
+.charts-section > *,
+.split-charts > * {
+  min-width: 0;
+  max-width: 100%;
 }
 
 .side-panel {

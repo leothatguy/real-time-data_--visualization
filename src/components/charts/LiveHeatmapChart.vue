@@ -9,6 +9,7 @@
 import { computed } from 'vue';
 import type { EChartsOption } from 'echarts';
 import VChart from 'vue-echarts';
+import { useMediaQuery } from '../../composables/useMediaQuery';
 import './echarts';
 
 const props = defineProps<{
@@ -17,6 +18,8 @@ const props = defineProps<{
   xLabels: string[];
   yLabels: string[];
 }>();
+
+const isMobile = useMediaQuery('(max-width: 640px)');
 
 function formatTooltip(params: unknown) {
   const value = Array.isArray(params)
@@ -42,10 +45,10 @@ const chartOption = computed<EChartsOption>(() => ({
     formatter: formatTooltip
   },
   grid: {
-    left: 84,
-    right: 12,
+    left: isMobile.value ? 62 : 84,
+    right: isMobile.value ? 8 : 12,
     top: 12,
-    bottom: 38
+    bottom: isMobile.value ? 54 : 38
   },
   xAxis: {
     type: 'category',
@@ -56,7 +59,10 @@ const chartOption = computed<EChartsOption>(() => ({
     axisLabel: {
       color: '#94a3b8',
       hideOverlap: true,
-      interval: 1
+      interval: isMobile.value ? 2 : 1,
+      rotate: isMobile.value ? 35 : 0,
+      fontSize: isMobile.value ? 10 : 12,
+      margin: isMobile.value ? 12 : 8
     }
   },
   yAxis: {
@@ -65,7 +71,11 @@ const chartOption = computed<EChartsOption>(() => ({
     splitArea: { show: true },
     axisTick: { show: false },
     axisLine: { lineStyle: { color: 'rgba(0, 229, 255, 0.22)' } },
-    axisLabel: { color: '#cbd5e1', fontWeight: 600 }
+    axisLabel: {
+      color: '#cbd5e1',
+      fontWeight: 600,
+      fontSize: isMobile.value ? 10 : 12
+    }
   },
   visualMap: {
     min: 0,
@@ -105,9 +115,12 @@ const chartOption = computed<EChartsOption>(() => ({
 
 <style scoped>
 .chart-container {
+  min-width: 0;
+  max-width: 100%;
   min-height: 300px;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 .chart-title {
@@ -119,6 +132,9 @@ const chartOption = computed<EChartsOption>(() => ({
 .chart {
   flex: 1;
   width: 100%;
+  min-width: 0;
+  max-width: 100%;
   min-height: 240px;
+  overflow: hidden;
 }
 </style>
