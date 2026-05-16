@@ -54,10 +54,11 @@
         :key="key"
         class="chip"
         :class="{ active: store.visibleDatasets[key] }"
+        :style="{ '--dataset-color': store.datasetMeta[key].color }"
         type="button"
         @click="store.toggleDataset(key)"
       >
-        <span class="swatch" :style="{ backgroundColor: store.datasetMeta[key].color }"></span>
+        <span class="swatch"></span>
         {{ store.datasetMeta[key].label }}
       </button>
     </div>
@@ -254,18 +255,21 @@ function toggleTheme() {
 
 .chip {
   padding: 0 var(--spacing-sm);
+  background-color: rgba(255, 255, 255, 0.025);
 }
 
 .chip.active {
   color: var(--text-primary);
   border-color: var(--accent);
-  background-color: var(--accent-soft);
+  background-color: color-mix(in srgb, var(--accent) 3%, var(--bg-panel-hover));
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 8%, transparent);
 }
 
 .swatch {
   width: 8px;
   height: 8px;
   border-radius: 999px;
+  background-color: var(--dataset-color);
 }
 
 @media (max-width: 900px) {

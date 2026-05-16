@@ -6,6 +6,7 @@ import type { ActivityLog, MetricsEnvelope, StreamState, SystemMetrics } from '.
 export interface ChartPoint {
   name: string;
   value: [number, number];
+  color?: string;
 }
 
 export interface ChartSeries {
@@ -24,12 +25,12 @@ const MAX_LOGS = 500;
 
 const DATASET_META: Record<DatasetKey, { label: string; color: string; max: number }> = {
   cpu: { label: 'CPU', color: '#00e5ff', max: 100 },
-  memory: { label: 'Memory', color: '#00e5ff', max: 100 },
-  networkIn: { label: 'Network In', color: '#00e5ff', max: 900 },
-  networkOut: { label: 'Network Out', color: '#00e5ff', max: 650 },
-  errorRate: { label: 'Error Rate', color: '#00e5ff', max: 25 },
-  latency: { label: 'Latency', color: '#00e5ff', max: 900 },
-  throughput: { label: 'Throughput', color: '#00e5ff', max: 2500 }
+  memory: { label: 'Memory', color: '#22c55e', max: 100 },
+  networkIn: { label: 'Network In', color: '#38bdf8', max: 900 },
+  networkOut: { label: 'Network Out', color: '#a78bfa', max: 650 },
+  errorRate: { label: 'Error Rate', color: '#ef4444', max: 25 },
+  latency: { label: 'Latency', color: '#f59e0b', max: 900 },
+  throughput: { label: 'Throughput', color: '#f472b6', max: 2500 }
 };
 
 const INITIAL_METRICS: SystemMetrics = {
@@ -106,14 +107,15 @@ export const useMetricsStore = defineStore('metrics', () => {
   const errorBars = computed<ChartPoint[]>(() => {
     const now = Date.now();
     return [
-      ['CPU', currentMetrics.value.cpu],
-      ['Memory', currentMetrics.value.memory],
-      ['Errors', currentMetrics.value.errorRate * 4],
-      ['Latency', Math.min(100, currentMetrics.value.latency / 9)],
-      ['Users', Math.min(100, currentMetrics.value.activeUsers / 25)]
-    ].map(([name, value], index) => ({
+      ['CPU', currentMetrics.value.cpu, DATASET_META.cpu.color],
+      ['Memory', currentMetrics.value.memory, DATASET_META.memory.color],
+      ['Errors', currentMetrics.value.errorRate * 4, DATASET_META.errorRate.color],
+      ['Latency', Math.min(100, currentMetrics.value.latency / 9), DATASET_META.latency.color],
+      ['Users', Math.min(100, currentMetrics.value.activeUsers / 25), DATASET_META.throughput.color]
+    ].map(([name, value, color], index) => ({
       name: String(name),
-      value: [now + index, Number(value)]
+      value: [now + index, Number(value)],
+      color: String(color)
     }));
   });
 
